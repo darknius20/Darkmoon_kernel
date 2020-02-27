@@ -501,15 +501,14 @@ struct rtnl_link_ops rmnet_link_ops __read_mostly = {
 	.fill_info	= rmnet_fill_info,
 };
 
-/* Needs either rcu_read_lock() or rtnl lock */
-struct rmnet_port *rmnet_get_port(struct net_device *real_dev)
+struct rmnet_port *rmnet_get_port_rcu(struct net_device *real_dev)
 {
 	if (rmnet_is_real_dev_registered(real_dev))
-		return rcu_dereference_rtnl(real_dev->rx_handler_data);
+		return rcu_dereference_bh(real_dev->rx_handler_data);
 	else
 		return NULL;
 }
-EXPORT_SYMBOL(rmnet_get_port);
+EXPORT_SYMBOL(rmnet_get_port_rcu);
 
 struct rmnet_endpoint *rmnet_get_endpoint(struct rmnet_port *port, u8 mux_id)
 {
@@ -533,7 +532,7 @@ int rmnet_add_bridge(struct net_device *rmnet_dev,
 	struct rmnet_port *port, *slave_port;
 	int err;
 
-	port = rmnet_get_port(real_dev);
+	port = rmnet_get_port_rtnl(real_dev);
 
 	/* If there is more than one rmnet dev attached, its probably being
 	 * used for muxing. Skip the briding in that case
@@ -548,7 +547,7 @@ int rmnet_add_bridge(struct net_device *rmnet_dev,
 	if (err)
 		return -EBUSY;
 
-	slave_port = rmnet_get_port(slave_dev);
+	slave_port = rmnet_get_port_rtnl(slave_dev);
 	slave_port->rmnet_mode = RMNET_EPMODE_BRIDGE;
 	slave_port->bridge_ep = real_dev;
 
@@ -566,11 +565,11 @@ int rmnet_del_bridge(struct net_device *rmnet_dev,
 	struct net_device *real_dev = priv->real_dev;
 	struct rmnet_port *port, *slave_port;
 
-	port = rmnet_get_port(real_dev);
+	port = rmnet_get_port_rtnl(real_dev);
 	port->rmnet_mode = RMNET_EPMODE_VND;
 	port->bridge_ep = NULL;
 
-	slave_port = rmnet_get_port(slave_dev);
+	slave_port = rmnet_get_port_rtnl(slave_dev);
 	rmnet_unregister_real_device(slave_dev, slave_port);
 
 	netdev_dbg(slave_dev, "removed from rmnet as slave\n");
@@ -606,7 +605,7 @@ void *rmnet_get_rmnet_port(struct net_device *dev)
 
 	if (dev) {
 		priv = netdev_priv(dev);
-		return (void *)rmnet_get_port(priv->real_dev);
+		return (void *)rmnet_get_port_rcu(priv->real_dev);
 	}
 
 	return NULL;
