@@ -559,7 +559,7 @@ out:
 	if (err)
 		dev_err(devfreq->dev.parent,
 			"failed to update frequency from OPP notifier (%d)\n",
-			err);
+			ret);
 
 	return NOTIFY_OK;
 }
