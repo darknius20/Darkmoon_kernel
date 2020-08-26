@@ -4,6 +4,10 @@
 # Copyright (c) 2018-2021 Panchajanya1999 <rsk52959@gmail.com>
 #
 
+sudo apt update
+sudo apt upgrade -y
+sudo apt install --no-install-recommends -y bc bison curl ccache ca-certificates flex gcc git glibc-doc jq libxml2 libtinfo5 libc6-dev libssl-dev libstdc++6 make openssl python rclone ssh tar tzdata wget zip
+
 # Persiapan
 NAMA_PERANGKAT="Poco M3"
 KODE_PERANGKAT=citrus
@@ -13,8 +17,6 @@ ID_CHAT_TELEGRAM="-683823277"
 NAMA_PEMBANGUN="Darknius"
 HOST_PEMBANGUN="Gitpod"
 
-# AnyKernel3
-git clone --depth=1 https://github.com/dragonroad99/AnyKernel3
 
 # Pilih "clang" atau "gcc"
 ALAT=clang
@@ -22,6 +24,8 @@ ALAT=clang
 	if [ $ALAT = "clang" ]
 	then
 		git clone --depth=1 -b master https://github.com/kdrag0n/proton-clang.git  clang
+		git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9 gcc
+        git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9 gcc32
 	fi
 
 	if [ $ALAT = "gcc" ]
@@ -43,12 +47,15 @@ MULAI=$(date +"%s")
 	if [ $ALAT = "clang" ]
 	then
 			ALAT_PEMBANGUNAN_KERNEL=$(${LOKASI_PEMBANGUNAN_KERNEL}/clang/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')
-			PATH="${LOKASI_PEMBANGUNAN_KERNEL}/clang/bin/:$PATH"
+			PATH="${LOKASI_PEMBANGUNAN_KERNEL}/clang/bin/:${LOKASI_PEMBANGUNAN_KERNEL}/gcc/bin:${LOKASI_PEMBANGUNAN_KERNEL}/gcc32/bin:$PATH"
 	elif [ $ALAT = "gcc" ]
 	then
 			ALAT_PEMBANGUNAN_KERNEL=$(${LOKASI_PEMBANGUNAN_KERNEL}/gcc/bin/aarch64-elf-gcc --version | head -n 1)
 			PATH="${LOKASI_PEMBANGUNAN_KERNEL}/gcc/bin/:${LOKASI_PEMBANGUNAN_KERNEL}/gcc32/bin/:/usr/bin:$PATH"
 	fi
+
+# AnyKernel3
+git clone --depth=1 https://github.com/dragonroad99/AnyKernel3
 
 # Pesan telegram
 export URL_PESAN_BOT="https://api.telegram.org/bot$TOKEN_BOT_TELEGRAM/sendMessage"
@@ -130,7 +137,7 @@ function rusak() {
 # Kompres ke zip
 function kompress() {
     cd AnyKernel3
-    zip -r9 ${NAMA_KERNEL}-${TANGGAL}-${KODE_PERANGKAT}.zip . -x ".git*" -x "LICENSE" -x "README.md"
+    zip -r9 DarkMoon-${TANGGAL}-citrus.zip .
     cd ..
 }
 
