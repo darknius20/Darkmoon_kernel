@@ -1158,13 +1158,6 @@ int __ref add_memory_resource(int nid, struct resource *res, bool online)
 	if (ret < 0)
 		goto error;
 
-	/* create memory block devices after memory was added */
-	ret = create_memory_block_devices(start, size);
-	if (ret) {
-		arch_remove_memory(nid, start, size, NULL);
-		goto error;
-	}
-
 	if (new_node) {
 		/* If sysfs file of new node can't be created, cpu on the node
 		 * can't be hot-added. There is no rollback way now.
@@ -2002,7 +1995,6 @@ void __ref __remove_memory(int nid, u64 start, u64 size)
 
 	mem_hotplug_begin();
 
-	arch_remove_memory(nid, start, size, NULL);
 	__release_memory_resource(start, size);
 
 	try_offline_node(nid);
