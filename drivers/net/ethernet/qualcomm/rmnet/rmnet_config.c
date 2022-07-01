@@ -496,7 +496,7 @@ struct rmnet_port *rmnet_get_port_rcu(struct net_device *real_dev)
 	else
 		return NULL;
 }
-EXPORT_SYMBOL(rmnet_get_port_rcu);
+EXPORT_SYMBOL(rmnet_get_port);
 
 struct rmnet_endpoint *rmnet_get_endpoint(struct rmnet_port *port, u8 mux_id)
 {
