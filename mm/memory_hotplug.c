@@ -1991,8 +1991,6 @@ void __ref remove_memory(int nid, u64 start, u64 size)
 	memblock_free(start, size);
 	memblock_remove(start, size);
 
-	arch_remove_memory(start, size, NULL);
-
 	try_offline_node(nid);
 
 	mem_hotplug_done();
