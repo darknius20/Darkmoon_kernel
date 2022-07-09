@@ -1,10 +1,10 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm64 4.19.114 Kernel Configuration
+# Linux/arm64 4.19.124 Kernel Configuration
 #
 
 #
-# Compiler: Blue-Virtual-Dragon clang version 13.0.1 (https://github.com/llvm/llvm-project.git 9dc7d6d5e3261f2cb1ae746ddaaf2f4d4f1f5350)
+# Compiler: proton version 13.0.1
 #
 CONFIG_GCC_VERSION=0
 CONFIG_CC_IS_CLANG=y
@@ -20,7 +20,7 @@ CONFIG_THREAD_INFO_IN_TASK=y
 #
 CONFIG_INIT_ENV_ARG_LIMIT=32
 # CONFIG_COMPILE_TEST is not set
-CONFIG_LOCALVERSION="-CitrusMoon"
+CONFIG_LOCALVERSION="-Darkmoon"
 # CONFIG_LOCALVERSION_AUTO is not set
 CONFIG_BUILD_SALT=""
 CONFIG_DEFAULT_HOSTNAME="(none)"
