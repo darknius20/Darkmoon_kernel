@@ -68,7 +68,6 @@ static int exfat_xattr_set(const struct xattr_handler *handler,
 
 static const struct xattr_handler exfat_xattr_handler = {
 	.prefix = "",  /* match anything */
-	.get = exfat_xattr_get,
 	.set = exfat_xattr_set,
 };
 
