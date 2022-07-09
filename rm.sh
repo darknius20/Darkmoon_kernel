@@ -1,0 +1,1 @@
+rm -rf gcc gcc32 out Anykernel3
