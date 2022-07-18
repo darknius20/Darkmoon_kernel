@@ -26,14 +26,14 @@ ALAT=clang
 	if [ $ALAT = "clang" ]
 	then
 		git clone --depth=1 -b master https://github.com/kdrag0n/proton-clang.git  clang
-		git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_aarch64_aarch64-linux-android-4.9 gcc
-        git clone --depth=1 https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9 gcc32
+		git clone --depth=1 https://github.com/darklightnest/gcc-arm64 gcc
+		git clone --depth=1 https://github.com/darklightnest/gcc-arm gcc32
 	fi
 
 	if [ $ALAT = "gcc" ]
 	then
-		git clone --depth=1 -b sc-v13.x https://github.com/OhMyVenyx/aarch64-elf-gcc.git gcc
-		git clone --depth=1 -b sc-v13.x https://github.com/OhMyVenyx/arm-eabi-gcc.git gcc32
+		git clone --depth=1 https://github.com/darklightnest/gcc-arm64 gcc
+		git clone --depth=1 https://github.com/darklightnest/gcc-arm gcc32
 	fi
 
 LOKASI_PEMBANGUNAN_KERNEL=$(pwd)
@@ -73,24 +73,15 @@ function membangun(){
 	then
 		MAKE+=(
 			CC=clang \
-			AR=llvm-ar \
-			OBJDUMP=llvm-objdump \
-			STRIP=llvm-strip \
-			NM=llvm-nm \
-			OBJCOPY=llvm-objcopy \
-			CROSS_COMPILE=aarch64-linux-gnu- \
-            CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
+			CROSS_COMPILE=aarch64-elf- \
+            CROSS_COMPILE_ARM32=arm-eabi- \
+			LLVM=1 \
 			LD=ld.lld
 		)
 	elif [ $ALAT = "gcc" ]
 	then
 		MAKE+=(
-			AR=aarch64-elf-ar \
-			OBJDUMP=aarch64-elf-objdump \
-			STRIP=aarch64-elf-strip \
-			NM=aarch64-elf-nm \
-			OBJCOPY=aarch64-elf-objcopy \
-                        CROSS_COMPILE=aarch64-elf- \
+            CROSS_COMPILE=aarch64-elf- \
 			CROSS_COMPILE_ARM32=arm-eabi-
 		)
 	fi
