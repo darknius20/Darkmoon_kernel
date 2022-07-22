@@ -153,6 +153,6 @@ out/
 clang/*
 gcc/*
 gcc32/*
-AnyKernel/*
+AnyKernel3/*
 modules/*
 modules/
