@@ -85,7 +85,6 @@ static int __msg_submit(struct mbox_chan *chan)
 exit:
 	spin_unlock_irqrestore(&chan->lock, flags);
 
-<<<<<<< HEAD
 	return err;
 }
 
@@ -107,14 +106,6 @@ static void msg_submit(struct mbox_chan *chan)
 	if (!err && (chan->txdone_method & TXDONE_BY_POLL))
 		/* kick start the timer immediately to avoid delays */
 		hrtimer_start(&chan->mbox->poll_hrt, 0, HRTIMER_MODE_REL);
-=======
-	if (!err && (chan->txdone_method & TXDONE_BY_POLL)) {
-		/* kick start the timer immediately to avoid delays */
-		spin_lock_irqsave(&chan->mbox->poll_hrt_lock, flags);
-		hrtimer_start(&chan->mbox->poll_hrt, 0, HRTIMER_MODE_REL);
-		spin_unlock_irqrestore(&chan->mbox->poll_hrt_lock, flags);
-	}
->>>>>>> 16b5013fa14b (mailbox: forward the hrtimer if not queued and under a lock)
 }
 
 static void tx_tick(struct mbox_chan *chan, int r)
